@@ -38,7 +38,11 @@ from transformers import (
     get_linear_schedule_with_warmup,
 )
 
-from models.model_ner import MODEL_FOR_SOFTMAX_NER_MAPPING, AutoModelForSoftmaxNer
+from models.model_ner import (
+    MODEL_FOR_SOFTMAX_NER_MAPPING,
+    MODEL_PRETRAINED_CONFIG_ARCHIVE_MAPPING,
+    AutoModelForSoftmaxNer,
+)
 
 from utils.utils_ner import convert_examples_to_features, get_labels, read_examples_from_file, collate_fn
 from utils.utils_adversarial import FGM, PGD
@@ -53,7 +57,8 @@ logger = logging.getLogger(__name__)
 
 MODEL_CONFIG_CLASSES = list(MODEL_FOR_SOFTMAX_NER_MAPPING.keys())
 MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
-ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in MODEL_CONFIG_CLASSES), ())
+MODEL_MAPS = tuple
+ALL_MODELS = sum((tuple(MODEL_PRETRAINED_CONFIG_ARCHIVE_MAPPING[conf].keys()) for conf in MODEL_CONFIG_CLASSES), ())
 TOKENIZER_ARGS = ["do_lower_case", "strip_accents", "keep_accents", "use_fast"]
 
 
@@ -363,6 +368,7 @@ def evaluate(args, model, tokenizer, labels, pad_token_label_id, mode, prefix=""
     return results, preds_list
 
 
+# 制作数据集
 def load_and_cache_examples(args, tokenizer, labels, pad_token_label_id, mode):
     if args.local_rank not in [-1, 0] and not evaluate:
         torch.distributed.barrier()  # Make sure only the first process in distributed training process the dataset, and the others will use the cache

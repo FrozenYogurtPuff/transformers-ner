@@ -3,6 +3,16 @@ from collections import OrderedDict
 from transformers import BertConfig, AlbertConfig, ElectraConfig, RobertaConfig
 from transformers import XLMConfig, DistilBertConfig, CamembertConfig, XLMRobertaConfig
 from transformers import AutoConfig, PretrainedConfig
+from transformers import (
+    BERT_PRETRAINED_CONFIG_ARCHIVE_MAP,
+    ALBERT_PRETRAINED_CONFIG_ARCHIVE_MAP,
+    ELECTRA_PRETRAINED_CONFIG_ARCHIVE_MAP,
+    ROBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP,
+    XLM_PRETRAINED_CONFIG_ARCHIVE_MAP,
+    DISTILBERT_PRETRAINED_CONFIG_ARCHIVE_MAP,
+    CAMEMBERT_PRETRAINED_CONFIG_ARCHIVE_MAP,
+    XLM_ROBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP,
+)
 
 from models.albert_ner import AlbertCrfForNer, AlbertSoftmaxForNer, AlbertSpanForNer
 from models.bert_ner import BertCrfForNer, BertSoftmaxForNer, BertSpanForNer
@@ -47,6 +57,19 @@ MODEL_FOR_SPAN_NER_MAPPING = OrderedDict(
         (BertConfig, BertSpanForNer),
         (AlbertConfig, AlbertSpanForNer),
         (ElectraConfig, ElectraSpanForNer),
+    ]
+)
+
+MODEL_PRETRAINED_CONFIG_ARCHIVE_MAPPING = OrderedDict(
+    [
+        (XLMConfig, XLM_PRETRAINED_CONFIG_ARCHIVE_MAP),
+        (DistilBertConfig, DISTILBERT_PRETRAINED_CONFIG_ARCHIVE_MAP),
+        (RobertaConfig, ROBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP),
+        (CamembertConfig, CAMEMBERT_PRETRAINED_CONFIG_ARCHIVE_MAP),
+        (XLMRobertaConfig, XLM_ROBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP),
+        (BertConfig, BERT_PRETRAINED_CONFIG_ARCHIVE_MAP),
+        (AlbertConfig, ALBERT_PRETRAINED_CONFIG_ARCHIVE_MAP),
+        (ElectraConfig, ELECTRA_PRETRAINED_CONFIG_ARCHIVE_MAP),
     ]
 )
 
