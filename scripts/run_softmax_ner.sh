@@ -8,7 +8,7 @@ LABEL=''
 
 CUDA_VISIBLE_DEVICES='1' python ../examples/run_softmax_ner.py \
 --data_dir $DATA_DIR \
---model_type $MODEL_MODEL_TYPE \
+--model_type $MODEL_TYPE \
 --model_name_or_path $MODEL_NAME_OR_PATH \
 --output_dir $OUTPUT_DIR \
 --labels $LABEL \
