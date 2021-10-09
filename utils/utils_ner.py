@@ -230,7 +230,7 @@ def collate_fn(batch):
             results += (item,)
     return results
 
-
+# TODO: 这里写死了标签类型，需要指定标签文件
 def get_labels(path):
     if path:
         with open(path, "r") as f:

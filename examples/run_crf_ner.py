@@ -50,6 +50,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+# 加载对应类映射
 MODEL_CONFIG_CLASSES = list(MODEL_FOR_CRF_NER_MAPPING.keys())
 MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
 ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in MODEL_CONFIG_CLASSES), ())
@@ -566,6 +567,7 @@ def main():
     parser.add_argument("--server_port", type=str, default="", help="For distant debugging.")
     args = parser.parse_args()
 
+    # 检查覆盖输出路径
     if (
             os.path.exists(args.output_dir)
             and os.listdir(args.output_dir)
@@ -619,6 +621,7 @@ def main():
     # Prepare CONLL-2003 task
     labels = get_labels(args.labels)
     num_labels = len(labels)
+    # 忽略索引默认 -100，用来当作 PAD 的 label
     # Use cross entropy ignore index as padding label id so that only real label ids contribute to the loss later
     pad_token_label_id = CrossEntropyLoss().ignore_index
 
