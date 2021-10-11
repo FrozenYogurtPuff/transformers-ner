@@ -353,6 +353,22 @@ def evaluate(args, model, tokenizer, labels, pad_token_label_id, mode, prefix=""
         'report': classification_report(true_entities, pred_entities)
     }
 
+    # 先打印训练阶段次数，后dev
+    '''
+        ***** Eval results 175 *****
+        ***** Eval loss : 0.517138389834002 *****
+        f1 = 0.9053721463124841
+        loss = 0.517138389834002
+        report =            precision    recall  f1-score   support
+        
+              LOC    0.93889   0.91998   0.92934      1837
+              PER    0.96456   0.96037   0.96246      1842
+              ORG    0.89253   0.87323   0.88277      1341
+             MISC    0.78659   0.76356   0.77490       922
+        
+        micro avg    0.91320   0.89768   0.90537      5942
+        macro avg    0.91275   0.89768   0.90513      5942
+    '''
     output_eval_file = os.path.join(args.output_dir, "eval_results.txt")
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
@@ -689,7 +705,7 @@ def main():
         results, _ = evaluate(args, model, tokenizer, labels, pad_token_label_id, mode="dev", prefix='dev')
         output_eval_file = os.path.join(args.output_dir, "eval_results.txt")
         with open(output_eval_file, "a") as writer:
-            writer.write('***** Predict in dev dataset *****')
+            writer.write('***** Predict in dev dataset *****\n')
             writer.write("{} = {}\n".format('report', str(results['report'])))
 
     if args.do_predict and args.local_rank in [-1, 0]:
@@ -701,7 +717,7 @@ def main():
         # Save results
         output_test_results_file = os.path.join(args.output_dir, "test_results.txt")
         with open(output_test_results_file, "w") as writer:
-            writer.write('***** Predict in dev dataset *****')
+            writer.write('***** Predict in dev dataset *****\n')
             writer.write("{} = {}\n".format('report', str(results['report'])))
 
         # Save predictions
