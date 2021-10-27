@@ -58,11 +58,11 @@ MODEL_MAPS = tuple
 ALL_MODELS = sum((tuple(MODEL_PRETRAINED_CONFIG_ARCHIVE_MAPPING[conf].keys()) for conf in MODEL_CONFIG_CLASSES), ())
 TOKENIZER_ARGS = ["do_lower_case", "strip_accents", "keep_accents", "use_fast"]
 
-DATA_DIR = '../datasets/tq_1/'
+DATA_DIR = '../datasets/ar_2/'
 MODEL_TYPE = 'bert'
 MODEL_NAME_OR_PATH = 'bert-base-cased'
-OUTPUT_DIR = 'output_test/'
-LABEL = '../datasets/tq_1/labels.txt'
+OUTPUT_DIR = '../scripts/output_test/'
+LABEL = '../datasets/ar_2/labels.txt'
 
 
 def set_seed(args):
@@ -180,10 +180,10 @@ def read_examples_from_json(data):
     examples = []
     for item in data:
         if 'words' not in item:
-            item['words'] = list(filter(None, re.split('([,|.|?|!|"|:|(|)|/])', item.sent)))
+            item['words'] = list(filter(str.split, re.split('([,|.|?|!|"|:|(|)|/| ])', item['sent'])))
         if 'labels' not in item:
-            item['labels'] = ['O' * len(item.words)]
-        examples.append(InputExample(guid="{}".format(guid_index), words=item.words, labels=item.labels))
+            item['labels'] = ['O' for _ in range(len(item['words']))]
+        examples.append(InputExample(guid="{}".format(guid_index), words=item['words'], labels=item['labels']))
         guid_index += 1
     return examples
 
@@ -202,28 +202,24 @@ parser.add_argument(
     "--data_dir",
     default=DATA_DIR,
     type=str,
-    required=True,
     help="The input data dir. Should contain the training files for the CoNLL-2003 NER task.",
 )
 parser.add_argument(
     "--model_type",
     default=MODEL_TYPE,
     type=str,
-    required=True,
     help="Model type selected in the list: " + ", ".join(MODEL_TYPES),
 )
 parser.add_argument(
     "--model_name_or_path",
     default=MODEL_NAME_OR_PATH,
     type=str,
-    required=True,
     help="Path to pre-trained model or shortcut name selected in the list: " + ", ".join(ALL_MODELS),
 )
 parser.add_argument(
     "--output_dir",
     default=OUTPUT_DIR,
     type=str,
-    required=True,
     help="The output directory where the model predictions and checkpoints will be written.",
 )
 
@@ -325,18 +321,6 @@ parser.add_argument(
 )
 parser.add_argument("--local_rank", type=int, default=-1, help="For distributed training: local_rank")
 args = parser.parse_args()
-
-if (
-        os.path.exists(args.output_dir)
-        and os.listdir(args.output_dir)
-        and args.do_train
-        and not args.overwrite_output_dir
-):
-    raise ValueError(
-        "Output directory ({}) already exists and is not empty. Use --overwrite_output_dir to overcome.".format(
-            args.output_dir
-        )
-    )
 
 # Setup CUDA, GPU & distributed training
 if args.local_rank == -1 or args.no_cuda:
