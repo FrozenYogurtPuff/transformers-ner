@@ -320,7 +320,7 @@ parser.add_argument(
          "See details at https://nvidia.github.io/apex/amp.html",
 )
 parser.add_argument("--local_rank", type=int, default=-1, help="For distributed training: local_rank")
-args = parser.parse_args()
+args, other_args = parser.parse_known_args()
 
 # Setup CUDA, GPU & distributed training
 if args.local_rank == -1 or args.no_cuda:

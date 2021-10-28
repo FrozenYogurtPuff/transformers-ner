@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/api/predict', methods=['POST'])
 def main():
-    if request.is_json:
+    if request and request.is_json:
         data = request.json
     else:
         data = [{'sent': 'Teacher Y asks student A to fill out a loan form and write down the following: information '
